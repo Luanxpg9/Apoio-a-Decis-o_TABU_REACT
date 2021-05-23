@@ -13,7 +13,13 @@ app.get("/salas", function(request, response){
         .then(function(docs){
             let salas = []
             docs.forEach(function(doc) {
-                salas.push({id: doc.id, name: doc.data().name})
+                salas.push({
+									id: doc.id, 
+									id_sala: doc.data().id_sala,
+									numero_cadeiras: doc.data().numero_cadeiras,
+									acessivel: doc.data().acessivel,
+									qualidade: doc.data().qualidade,
+								})
             })
             response.json(salas)
         })
