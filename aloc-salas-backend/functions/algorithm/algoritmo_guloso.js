@@ -47,5 +47,36 @@ module.exports = app => {
     return taxa
   }
 
-  return { algoritmoGuloso, calcTaxaDesocupacao }
+  const mapSalasDisponiveis = (turma, salas, aloc) => {
+    const dominioRestante = criarDominio(salas) //{1 => [horario, sala]}
+    const discHorarios = separarHorarios([turma])
+
+    const horariosTurma = discHorarios.get(turma.id)
+    let salasDisponiveis = salasComHorariosDaTurma(horariosTurma, dominioRestante) //{1 => [horario, sala]}
+    salasDisponiveis = removerSalasSemAssentosSuficientes(turma, salas, salasDisponiveis)
+    if(turma.acessibilidade)
+      salasDisponiveis = removerSalasNaoAcessiveis(salas, salasDisponiveis)
+
+    const disponiveis = new Map(salasDisponiveis)
+    //Remover as salas/horario que ja estao alocados
+    aloc.forEach((value, index) => { //{discID => {"3M12":"500","4M12":"500"}}
+      const salasHorarios = Object.entries(value) //[[3M12, 500], [4M12, 500]]
+      salasHorarios.forEach(el => { //[3M12, 500]
+        salasDisponiveis.forEach((domItem, i) => {
+          if(el[0] == domItem[0] && el[1] == domItem[1]) {
+            disponiveis.delete(i)
+          }
+        })
+      })
+    })
+    const resultado = {}
+    let cont = 1
+    disponiveis.forEach((item, i) => {
+      resultado[cont] = item
+      cont++
+    })
+    return resultado
+  }
+
+  return { algoritmoGuloso, calcTaxaDesocupacao, mapSalasDisponiveis }
 }

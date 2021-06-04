@@ -1,6 +1,7 @@
 const horariosDataC1 = require('../data/horarios_data')
 
 module.exports = app => {
+
   const getSalasBD = async (app) => {
     return await app.config.db.salas.get()
       .then(docs => {
@@ -40,22 +41,22 @@ module.exports = app => {
   }
 
    // ===== Criar um Map das combinacoes horario/sala
-  function criarDominio(salasDataC1) {
+  function criarDominio(salas) {
     const dominio = [] //[[horario, sala]]
 
-    horariosDataC1.map((h) => salasDataC1.map(el => [h, el.id]))
+    horariosDataC1.map((h) => salas.map(el => [h, el.id]))
       .forEach(el => el.forEach(e => dominio.push(e)))
     
     let dominioRestante = new Map()
     dominio.forEach((el, i) => {
       dominioRestante.set(i, el)
     })
-    return dominioRestante
+    return dominioRestante //{1 => [horario, sala]}
   }
 
-  const separarHorarios = (turmasDataC1) => {
+  const separarHorarios = (turmas) => {
     const discHorarios = new Map()
-    turmasDataC1.forEach((turma) => {
+    turmas.forEach((turma) => {
         discHorarios.set(turma.id, turma.dias_horario.split("-"))
     })
     return discHorarios
@@ -72,20 +73,20 @@ module.exports = app => {
     return salasPossiveis
   }
 
-  function removerSalasSemAssentosSuficientes(disc, salasDataC1, dominioRest) {
+  function removerSalasSemAssentosSuficientes(disc, salas, dominioRest) {
     let salasPossiveis = new Map()
     dominioRest.forEach((el, i) => {
-      let sala = salasDataC1.filter(e => e.id == el[1])[0]
+      let sala = salas.filter(e => e.id == el[1])[0]
       if(disc.numero_alunos <= sala.numero_cadeiras)
         salasPossiveis.set(i, el)
     })
     return salasPossiveis
   }
 
-  function removerSalasNaoAcessiveis(salasDataC1, dominioRest) {
+  function removerSalasNaoAcessiveis(salas, dominioRest) {
     let salasPossiveis = new Map()
     dominioRest.forEach((el, i) => {
-      let sala = salasDataC1.filter(e => e.id == el[1])[0]
+      let sala = salas.filter(e => e.id == el[1])[0]
       if(sala.acessivel) {
         salasPossiveis.set(i, el)
       }
@@ -97,11 +98,11 @@ module.exports = app => {
     return (sala.numero_cadeiras - disc.numero_alunos) / sala.numero_cadeiras
   }
 
-  function selecionarMelhorSala(disc, salasDataC1, dominioRest) {
+  function selecionarMelhorSala(disc, salas, dominioRest) {
     let melhorSala
     let menorTaxa = 1000
     dominioRest.forEach((el, i) => {
-      let sala = salasDataC1.filter(e => e.id == el[1])[0]
+      let sala = salas.filter(e => e.id == el[1])[0]
       let taxa = taxaDesocupacao(disc, sala)
       if(taxa < menorTaxa) {
         menorTaxa = taxa
