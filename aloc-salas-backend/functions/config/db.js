@@ -5,7 +5,8 @@ module.exports = app => {
 
     const salas = admin.firestore().collection('salas')
     const turmas = admin.firestore().collection('turmas')
+    const alocacao = admin.firestore().collection('alocacao')
     
-    return { salas, turmas }
+    return { salas, turmas, alocacao }
 
 }

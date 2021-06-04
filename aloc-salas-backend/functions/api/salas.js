@@ -7,7 +7,7 @@ module.exports = app => {
             let salas = []
             docs.forEach(doc => {
                 salas.push({
-                  id: doc.id, 
+                  id: doc.id,
                   id_sala: doc.data().id_sala,
                   numero_cadeiras: doc.data().numero_cadeiras,
                   acessivel: doc.data().acessivel,
@@ -25,7 +25,6 @@ module.exports = app => {
         acessivel: req.body.acessivel,
         qualidade: req.body.qualidade,
     }
-    console.log(sala)
     //VALIDAÇÕES
     try {
         existsOrError(sala.id_sala, 'Atributo "id_sala" não informado')
