@@ -1,4 +1,4 @@
-const horariosDataC1 = require('../data/horarios_data')
+const horarios = require('../data/horarios_data')
 
 module.exports = app => {
 
@@ -44,7 +44,7 @@ module.exports = app => {
   function criarDominio(salas) {
     const dominio = [] //[[horario, sala]]
 
-    horariosDataC1.map((h) => salas.map(el => [h, el.id]))
+    horarios.map((h) => salas.map(el => [h, el.id]))
       .forEach(el => el.forEach(e => dominio.push(e)))
     
     let dominioRestante = new Map()
@@ -98,34 +98,33 @@ module.exports = app => {
     return (sala.numero_cadeiras - disc.numero_alunos) / sala.numero_cadeiras
   }
 
-  function selecionarMelhorSala(disc, salas, dominioRest) {
-    let melhorSala
-    let menorTaxa = 1000
-    dominioRest.forEach((el, i) => {
-      let sala = salas.filter(e => e.id == el[1])[0]
-      let taxa = taxaDesocupacao(disc, sala)
-      if(taxa < menorTaxa) {
-        menorTaxa = taxa
-        melhorSala = sala
-      }
-    })
-    return {melhorSala, menorTaxa}
-  }
-
-  function criarValorAlocacao(sala, dominioRest) {
+  function criarValorAlocacao(turma, horariosDaTurma, salas, salasDisponiveis) {
     let obj = {}
-    dominioRest.forEach(el => {
-      if(el[1] == sala.id) obj[el[0]] = el[1]
+    horariosDaTurma.forEach(horario => {
+      let melhorSala
+      let menorTaxa = 1000
+      salasDisponiveis.forEach((itemDominio, i) => { //{1 => [horario, sala]}
+        if(itemDominio[0] == horario) {
+          const sala = salas.filter(s => s.id == itemDominio[1])[0]
+          const taxa = taxaDesocupacao(turma, sala)
+          if(taxa < menorTaxa) {
+            menorTaxa = taxa
+            melhorSala = sala
+          }
+        }
+      })
+      obj[horario] = melhorSala.id
     })
-    return obj
+    return obj //{horario: salaid, horario: salaid}
   }
 
   function removerHorarioSalaAlocado(valorAloc, dominioRest) {
-    let array = Object.entries(valorAloc)
+    let itemsAlocados = Object.entries(valorAloc) //[[horario, sala], [horario, sala]]
     let keys = []
-    dominioRest.forEach((el, i) => {
-      array.forEach((a) => {
-        if(a[0] == el[0] && a[1] == el[1]) keys.push(i)
+    dominioRest.forEach((itemDominio, i) => { //{1 => [horario, sala]}
+      itemsAlocados.forEach(itemAloc => { //[horario, sala]
+        if(itemAloc[0] == itemDominio[0] && itemAloc[1] == itemDominio[1])
+          keys.push(i)
       })
     })
     keys.forEach(k => dominioRest.delete(k))
@@ -133,7 +132,7 @@ module.exports = app => {
 
   return { getSalasBD, getTurmasBD, criarDominio, separarHorarios, 
     salasComHorariosDaTurma, removerSalasSemAssentosSuficientes, 
-    removerSalasNaoAcessiveis, taxaDesocupacao, selecionarMelhorSala, 
+    removerSalasNaoAcessiveis, taxaDesocupacao, 
     criarValorAlocacao, removerHorarioSalaAlocado
   }
 }

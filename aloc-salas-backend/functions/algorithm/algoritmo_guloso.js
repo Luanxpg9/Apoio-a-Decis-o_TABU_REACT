@@ -12,28 +12,26 @@ module.exports = app => {
 
   const { criarDominio, separarHorarios, salasComHorariosDaTurma, 
     removerSalasSemAssentosSuficientes, removerSalasNaoAcessiveis, 
-    taxaDesocupacao, selecionarMelhorSala, criarValorAlocacao, removerHorarioSalaAlocado
+    taxaDesocupacao, criarValorAlocacao, removerHorarioSalaAlocado
   } = app.algorithm.algoritmo_guloso_funcoes
 
   const algoritmoGuloso = (salas, turmas) => {
-    const dominioRestante = criarDominio(salas)
-    const discHorarios = separarHorarios(turmas)
-    let taxaDesocupacao = 0
+    const dominioRestante = criarDominio(salas) // {1 => [horario, sala]}
+    const discHorarios = separarHorarios(turmas) // {turmaId => [horario1, horario2]}
     const alocacao = new Map()
 
-    discHorarios.forEach((value, index) => {
-      const disciplina = turmas.filter(turma => turma.id == index)[0]
-      let salasDisponiveis = salasComHorariosDaTurma(value, dominioRestante)
-      salasDisponiveis = removerSalasSemAssentosSuficientes(disciplina, salas, salasDisponiveis)
-      if(disciplina.acessibilidade)
+    discHorarios.forEach((horariosDaTurma, index) => {
+      const turma = turmas.filter(turma => turma.id == index)[0]
+      let salasDisponiveis = salasComHorariosDaTurma(horariosDaTurma, dominioRestante)
+      salasDisponiveis = removerSalasSemAssentosSuficientes(turma, salas, salasDisponiveis)
+      if(turma.acessibilidade)
         salasDisponiveis = removerSalasNaoAcessiveis(salas, salasDisponiveis)
-      let {melhorSala, menorTaxa} = selecionarMelhorSala(disciplina, salas, salasDisponiveis)
-      taxaDesocupacao += menorTaxa
-      alocacao.set(index, criarValorAlocacao(melhorSala, salasDisponiveis))
-      removerHorarioSalaAlocado(alocacao.get(index), dominioRestante)
+      const valorAlocacao = criarValorAlocacao(turma, horariosDaTurma, salas, salasDisponiveis)
+      alocacao.set(index, valorAlocacao)
+      removerHorarioSalaAlocado(valorAlocacao, dominioRestante)
     })
 
-    return {alocacao, taxaDesocupacao}
+    return alocacao
   }
 
   const calcTaxaDesocupacao = (salas, turmas, aloc) => {
@@ -69,13 +67,7 @@ module.exports = app => {
         })
       })
     })
-    const resultado = {}
-    let cont = 1
-    disponiveis.forEach((item, i) => {
-      resultado[cont] = item
-      cont++
-    })
-    return resultado
+    return disponiveis // {1 => [3M12, 500]}
   }
 
   return { algoritmoGuloso, calcTaxaDesocupacao, mapSalasDisponiveis }

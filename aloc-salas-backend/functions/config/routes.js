@@ -29,10 +29,10 @@ module.exports = app => {
       //get - executa o algoritmo e retorna o id de uma alocacao
 
   app.route('/calc')
-      .post(app.api.alocacao.calcTaxa) 
+      .post(app.api.alocacao.calcTaxa)
       //post - calcula a taxa de desocupacao de uma alocacao submetida
 
   app.route('/salas-disponiveis/:id')
-      .post(app.api.alocacao.salasDisponiveis) 
+      .post(app.api.alocacao.salasDisponiveis)
       //post - retorna as salas/horarios disponiveis dada uma turma e uma alocacao
 }

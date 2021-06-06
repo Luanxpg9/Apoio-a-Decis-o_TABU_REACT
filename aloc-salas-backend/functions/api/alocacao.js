@@ -1,17 +1,8 @@
-// {discID => {"3M12":"500","4M12":"500"}} /// {"COMP0250":{"3M12":"500","4M12":"500"}}
-const transformarResultadoEmObjeto = (alocacao) => {
-  const obj = {}
-  alocacao.forEach((value, index) => {
-    obj[index] = value
-  })
-  return obj
-}
-
 module.exports = app => {
 
-  const { algoritmoGuloso, calcTaxaDesocupacao, 
-    mapSalasDisponiveis } = app.algorithm.algoritmo_guloso
-  const {getSalasBD, getTurmasBD} = app.algorithm.algoritmo_guloso_funcoes
+  const { algoritmoGuloso, calcTaxaDesocupacao, mapSalasDisponiveis } = app.algorithm.algoritmo_guloso
+  const { getSalasBD, getTurmasBD } = app.algorithm.algoritmo_guloso_funcoes
+  const { hillClimbing } = app.algorithm.hill_climbing
 
   const getAll = async (req, res) => {
     const salas = await getSalasBD(app)
@@ -76,9 +67,10 @@ module.exports = app => {
   const run = async (req, res) => {
     const salas = await getSalasBD(app)
     const turmas = await getTurmasBD(app)
-    const {alocacao} = algoritmoGuloso(salas, turmas)
-    const alocTransformada = transformarResultadoEmObjeto(alocacao)
-    const alocId = await app.config.db.alocacao.add(alocTransformada)
+    const alocacao = hillClimbing(salas, turmas) // {discID => {"3M12":"500","4M12":"500"}}
+    const alocObj = Object.fromEntries(alocacao) // {"COMP0250":{"3M12":"500","4M12":"500"}}
+
+    const alocId = await app.config.db.alocacao.add(alocObj)
       .then(doc => res.status(200).json(doc.id))
       .catch(err => res.status(500).send(err))
   }
@@ -92,7 +84,12 @@ module.exports = app => {
     const salas = await getSalasBD(app)
     const disponiveis = mapSalasDisponiveis(turma, salas, aloc)
 
-    res.status(200).json(disponiveis) //{1: {horario: sala}}
+    const resultado = {}
+    disponiveis.forEach(item => {
+      resultado[item[0]] = item[1]
+    })
+
+    res.status(200).json(resultado) //{horario: sala}
   }
 
   return { getAll, get, run, save, calcTaxa, remove, salasDisponiveis }
