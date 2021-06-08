@@ -1,8 +1,14 @@
 .main-block {
   margin: 2%;
   border: 1px solid red;
+  display: flexbox;
+}
+
+p {
+  color: darkcyan;
 }
 
 img {
+  margin: 5px;
   max-width: 20%;
 }

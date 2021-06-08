@@ -1,16 +1,29 @@
+hr {
+  border-color: blueviolet;
+  margin: 2%;
+}
+
 .titles {
+  padding: 40px;
+  font-size: large;
+  font: bolder;
+  color: darkcyan;
   align-self: center;
   text-align-last: center;
 }
 
 .blocks {
   display: flex;
-  flex-direction: row;
+
   text-align: center;
   justify-content: center;
 }
 
 .graphs {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
 }
 
 .lists {

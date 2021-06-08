@@ -8,12 +8,12 @@ class Graphs extends Component {
     this.state = {
       chartData: {
         labels: [
-          "Didatica 1",
-          "Didatica 2",
-          "Didatica 3",
-          "Didatica 4",
-          "Didatica 5",
-          "Didatica 6",
+          "Alocação 1",
+          "Alocação 2",
+          "Alocação 3",
+          "Alocação 4",
+          "Alocação 5",
+          "Alocação 6",
         ],
         datasets: [
           {
@@ -46,7 +46,7 @@ class Graphs extends Component {
       <div className="chart">
         <Bar
           data={this.state.chartData}
-          options={{ maintainAspectRatio: false }}
+          options={{ maintainAspectRatio: true }}
         />
       </div>
     );

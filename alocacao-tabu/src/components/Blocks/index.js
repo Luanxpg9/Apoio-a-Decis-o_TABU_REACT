@@ -1,10 +1,10 @@
 import "./index.css";
 import logo from "../../images/ufs_logo.jpg";
 
-function Blocks() {
+function Blocks(props) {
   return (
     <div className="main-block">
-      <h4> Isso é apenas um teste</h4>
+      <p>UFS LOGO</p>
       <img src={logo} alt="Ufs logo" />
     </div>
   );

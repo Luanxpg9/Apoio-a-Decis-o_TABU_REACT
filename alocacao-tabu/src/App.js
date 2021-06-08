@@ -5,9 +5,7 @@ import Graphs from "./components/Graphs";
 function App() {
   return (
     <div className="App">
-      <div className="titles">
-        <h3>Bem vindo ao gerenciamento de Salas da UFS</h3>
-      </div>
+      <div className="titles">Bem vindo ao gerenciamento de Salas da UFS</div>
       <hr />
       <div className="blocks">
         <Blocks />
