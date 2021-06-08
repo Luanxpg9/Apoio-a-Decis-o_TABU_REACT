@@ -4,6 +4,25 @@
 }
 
 .blocks {
-  flex-direction: column;
-  margin: 10%;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+}
+
+.graphs {
+}
+
+.lists {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+}
+
+.tables {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
 }
