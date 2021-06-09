@@ -18,6 +18,7 @@ module.exports = app => {
       
   app.route('/alocacao')
       .get(app.api.alocacao.getAll) //get - retorna todas as alocacoes
+      .post(app.api.alocacao.save) //post - cria uma nova alocacao
 
   app.route('/alocacao/:id')
       .put(app.api.alocacao.save) //put - altera uma alocacao por id

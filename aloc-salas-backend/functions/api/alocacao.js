@@ -1,6 +1,6 @@
 module.exports = app => {
 
-  const { algoritmoGuloso, calcTaxaDesocupacao, mapSalasDisponiveis } = app.algorithm.algoritmo_guloso
+  const { calcTaxaDesocupacao, mapSalasDisponiveis } = app.algorithm.algoritmo_guloso
   const { getSalasBD, getTurmasBD } = app.algorithm.algoritmo_guloso_funcoes
   const { hillClimbing } = app.algorithm.hill_climbing
 
@@ -37,10 +37,16 @@ module.exports = app => {
     const aloc = new Map(Object.entries(req.body))
     if(aloc.size < 5) return res.status(404).send('Submeta uma alocacao valida')
 
-    let documentRef = app.config.db.alocacao.doc(req.params.id)
-    return await documentRef.update(req.body)
-        .then(() => res.status(204).send())
-        .catch(err => res.status(500).send(err))
+    if(req.params.id) {
+      let documentRef = app.config.db.alocacao.doc(req.params.id)
+      return await documentRef.update(req.body)
+          .then(() => res.status(204).send())
+          .catch(err => res.status(500).send(err))
+    } else {
+      return await app.config.db.alocacao.add(req.body)
+            .then(ref => res.status(201).send(ref.id))
+            .catch(err => res.status(500).send(err))
+    }
   }
 
   const remove = async (req, res) => {

@@ -33,7 +33,7 @@ module.exports = app => {
   }
 
   const tweak = (turmas, salas, aloc) => {
-    const prob = 0.8
+    const prob = 0.5
     turmas.forEach(turma => {
       if (prob >= Math.random()) {
         let dominioDisponivel = mapSalasDisponiveis(turma, salas, aloc) // {1 => [3M12, 500]}
@@ -57,5 +57,6 @@ module.exports = app => {
     }
     return S
   }
+  
   return { hillClimbing }
 }
