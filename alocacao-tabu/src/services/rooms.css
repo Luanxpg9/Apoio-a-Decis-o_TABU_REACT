@@ -1,0 +1,13 @@
+.itemList {
+  margin: 20px;
+  flex: 1 0 21%; /* explanation below */
+  border: 1px solid darkslateblue;
+}
+
+.roomList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  text-align: center;
+  justify-content: center;
+}

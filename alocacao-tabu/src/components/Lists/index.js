@@ -1,9 +1,12 @@
+import Rooms from "../../services/rooms.js";
+
 function Lists(props) {
-  const data = ["sala 1", "sala 2", "sala3"];
   return (
-    <div>
+    <div className="titles">
       <h4>{props.title}</h4>
-      {}
+      <Rooms className="titles" />
     </div>
   );
 }
+
+export default Lists;

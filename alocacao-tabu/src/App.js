@@ -1,6 +1,7 @@
 import "./App.css";
 import Blocks from "./components/Blocks";
 import Graphs from "./components/Graphs";
+import Lists from "./components/Lists";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
       </div>
       <hr />
       <div className="lists">
-        <p>Here will be lists</p>
+        <Lists title={"Hello Luan"} />
       </div>
       <hr />
       <div className="tables">

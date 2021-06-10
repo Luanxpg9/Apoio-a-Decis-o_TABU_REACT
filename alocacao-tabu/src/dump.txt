@@ -1,0 +1,11 @@
+res =  Axios.get(link)
+const link =
+    "https://us-central1-aloc-salas-backend.cloudfunctions.net/api/salas";
+
+<li>
+      {room.id}
+      {room.id_sala}
+      {room.numero_cadeiras}
+      {room.acessivel}
+      {room.qualidade}
+</li>

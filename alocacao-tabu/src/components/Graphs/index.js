@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import "./index.css";
 import { Bar, Line, Pie } from "react-chartjs-2";
+import "./index.css";
 
 class Graphs extends Component {
   constructor(props) {
