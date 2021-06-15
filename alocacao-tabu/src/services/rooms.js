@@ -26,7 +26,7 @@ class Rooms extends React.Component {
     return (
       <ul className="roomList">
         {this.state.rooms.map((room) => (
-          <li className="itemList">
+          <li key={room.id} className="itemList">
             {"id: " + room.id} <br /> {"id sala: " + room.id_sala} <br />{" "}
             {"Nº de cadeiras: " + room.numero_cadeiras} <br />{" "}
             {"Acessivel: " + room.acessivel} <br />

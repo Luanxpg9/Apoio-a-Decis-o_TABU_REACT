@@ -10,21 +10,20 @@ function App() {
       <hr />
       <div className="blocks">
         <Blocks />
-        <Blocks />
-        <Blocks />
-        <Blocks />
       </div>
       <hr />
       <div className="graphs">
         <Graphs />
       </div>
       <hr />
-      <div className="lists">
-        <Lists title={"Hello Luan"} />
-      </div>
-      <hr />
+
       <div className="tables">
-        <p>Here will be tables</p>
+        <Lists title={"===Listagem de Alocacoes==="} listName={"alocacao"} />
+      </div>
+
+      <hr />
+      <div className="lists">
+        <Lists title={"• Listagem de Salas"} listName={"rooms"} />
       </div>
       <hr />
     </div>
